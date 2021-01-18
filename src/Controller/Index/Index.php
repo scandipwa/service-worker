@@ -6,11 +6,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\View\Asset\Repository;
 
 class Index implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     private $assetRepo;
 
@@ -20,18 +21,28 @@ class Index implements HttpGetActionInterface
     private $filesystemDriver;
 
     /**
+     * @var ResultFactory
+     */
+    private $resultFactory;
+
+    /**
      * Index constructor.
      *
-     * @param \Magento\Framework\App\Action\Context $context
+     * @param DirectoryList $directoryList,
+     * @param DriverInterface $filesystemDriver,
+     * @param Repository $assetRepo,
+     * @param ResultFactory $resultFactory
      */
     public function __construct(
         DirectoryList $directoryList,
         DriverInterface $filesystemDriver,
-        \Magento\Framework\View\Asset\Repository $assetRepo
+        Repository $assetRepo,
+        ResultFactory $resultFactory
     ) {
         $this->directoryList = $directoryList;
         $this->filesystemDriver = $filesystemDriver;
         $this->assetRepo = $assetRepo;
+        $this->resultFactory = $resultFactory;
     }
 
     /**

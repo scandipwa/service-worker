@@ -4,11 +4,13 @@ namespace ScandiPWA\ServiceWorker\Controller;
 
 use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\RouterInterface;
 use Magento\Framework\App\Action\Forward;
-
-class Router implements \Magento\Framework\App\RouterInterface
+class Router implements RouterInterface
 {
-    /** @var \Magento\Framework\App\ActionFactory $actionFactory */
+    /**
+     * @var ActionFactory
+     */
     protected $actionFactory;
 
     /**
