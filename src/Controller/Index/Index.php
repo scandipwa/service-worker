@@ -2,10 +2,11 @@
 
 namespace ScandiPWA\ServiceWorker\Controller\Index;
 
+use Magento\Framework\UrlInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Asset\Repository;
 
 class Index implements HttpGetActionInterface
@@ -24,6 +25,11 @@ class Index implements HttpGetActionInterface
      * @var ResultFactory
      */
     private $resultFactory;
+    
+    /**
+     * @var UrlInterface
+     */
+    private $urlModel;
 
     /**
      * Index constructor.
@@ -37,12 +43,14 @@ class Index implements HttpGetActionInterface
         DirectoryList $directoryList,
         DriverInterface $filesystemDriver,
         Repository $assetRepo,
-        ResultFactory $resultFactory
+        ResultFactory $resultFactory,
+        UrlInterface $urlModel
     ) {
         $this->directoryList = $directoryList;
         $this->filesystemDriver = $filesystemDriver;
         $this->assetRepo = $assetRepo;
         $this->resultFactory = $resultFactory;
+        $this->urlModel = $urlModel;
     }
 
     /**
@@ -51,14 +59,27 @@ class Index implements HttpGetActionInterface
      */
     public function getServiceWorkerContent(): string
     {
+        $staticAbsolutePath = $this->directoryList->getPath(DirectoryList::STATIC_VIEW);
+        $frontendLocalePath = $this->assetRepo->getStaticViewFileContext()->getPath();
         $serviceWorkerName = 'service-worker.js';
-        $staticViewDirectory = $this->directoryList->getPath(DirectoryList::STATIC_VIEW);
+        $baseUrl = $this->urlModel->getBaseUrl();
+        
         $bundleFilePath = sprintf(
             '%s/%s/Magento_Theme/%s',
-            $staticViewDirectory,
-            $this->assetRepo->getStaticViewFileContext()->getPath(),
+            $staticAbsolutePath,
+            $frontendLocalePath,
             $serviceWorkerName
         );
+
+        if (file_exists($bundleFilePath) !== true) {
+            $bundleFilePath = sprintf(
+                '%sstatic/%s/Magento_Theme/%s',
+                $baseUrl,
+                $frontendLocalePath,
+                $serviceWorkerName
+            );
+        }
+
         return $this->filesystemDriver->fileGetContents($bundleFilePath);
     }
 
