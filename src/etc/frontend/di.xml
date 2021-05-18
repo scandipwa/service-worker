@@ -22,4 +22,11 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="ScandiPWA\Router\Controller\ConfigurableRouter" type="ScandiPWA\Router\Controller\Router">
+        <arguments>
+            <argument name="ignoredURLs" xsi:type="array">
+                <item name="serviceWorker" xsi:type="string">^/service-worker\.js</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
