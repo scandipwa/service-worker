@@ -11,6 +11,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Filesystem\DriverInterface" type="Magento\Framework\Filesystem\Driver\File" />
     <virtualType name="ScandiPWA\Router\Controller\ConfigurableRouter" type="ScandiPWA\Router\Controller\Router">
         <arguments>
             <argument name="ignoredURLs" xsi:type="array">
