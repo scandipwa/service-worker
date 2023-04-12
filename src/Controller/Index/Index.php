@@ -32,6 +32,11 @@ class Index implements HttpGetActionInterface
     private $urlModel;
 
     /**
+     * @var DirectoryList
+     */
+    protected $directoryList;
+
+    /**
      * Index constructor.
      *
      * @param DirectoryList $directoryList,
